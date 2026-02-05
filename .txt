@@ -1,0 +1,174 @@
+# PL-MoVi-UNet:A Parallel Lightweight MobileNet-ViT Network with Heterogeneous Feature Alignment Fusion for Medical Segmentation
+
+## 📖 Introduction 
+
+**PL-MoVi-UNet** is a lightweight, high-precision medical image segmentation model designed for resource-constrained clinical environments (e.g., mobile terminals, bedside devices). It features a parallel dual-stream architecture that synergizes the local inductive bias of **CNNs** (MobileNetV3) and the global long-range dependencies of **Transformers** (MobileViT).
+
+**Key Contributions:**
+
+* **Parallel Dual-Stream:** Simultaneously extracts local and global features.
+* **DCAF Module:** Dual-stream Channel-Spatial Adaptive Fusion for effective feature alignment.
+* **MLSP Module:** Multilevel Spatial Pyramid for capturing small lesions and fine details.
+* **Extreme Efficiency:** Achieves **38x parameter reduction** compared to TransUNet, with only **2.45M Params** and **0.94G FLOPs**.
+
+*(Please replace `docs/architecture.png` with your Figure 1 architecture diagram)*
+
+---
+
+## 📂 Project Structure (项目结构)
+
+Based on the provided file list, the repository is organized as follows:
+
+```text
+PL-MoVi-UNet/
+├── Dataset/                  # Dataset configurations
+├── models/                   # Model definitions (PL-MoVi-UNet, DCAF, MLSP)
+├── preprocess/               # Data preprocessing scripts
+├── results/                  # Segmentation masks and evaluation logs
+├── runs/                     # Tensorboard logs and checkpoints
+├── src/                      # Core training logic and config
+├── utils/                    # Helper functions (metrics, logger, etc.)
+├── DCAF_weight.py            # Script to analyze/visualize DCAF module weights
+├── dataset.py                # Generic dataset loader
+├── datasetAHJN-LCPS.py       # Specific loader for AHJN-LCPS dataset
+├── get_param_flops.py        # Script to calculate model complexity (Params/FLOPs)
+├── test_PL_MoViTUNet_LiTS.py # Inference script for LiTS17 dataset
+├── train_PL_MoViTUNet_LiTS.py# Training script for LiTS17 dataset
+└── visualize_stage.py        # Visualization of intermediate feature maps
+
+```
+
+---
+
+## 🚀 Getting Started (快速开始)
+
+### 1. Requirements
+
+* Python >= 3.8
+* PyTorch >= 1.10
+* torchvision
+* numpy
+* scipy
+* medpy (for medical metrics)
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+
+```
+
+### 2. Data Preparation
+
+Please organize your dataset (e.g., LiTS17) as follows:
+
+```text
+data/
+  ├── LiTS17/
+  │   ├── train/
+  │   │   ├── image/
+  │   │   └── label/
+  │   └── val/
+
+```
+
+Update the path in `src/config.py` or pass it as an argument.
+
+### 3. Training
+
+To train PL-MoVi-UNet on the LiTS17 dataset:
+
+```bash
+python train_PL_MoViTUNet_LiTS.py --batch_size 16 --epochs 200 --lr 0.001
+
+```
+
+### 4. Evaluation & Inference
+
+To test the model and generate segmentation results:
+
+```bash
+python test_PL_MoViTUNet_LiTS.py --weights runs/best_model.pth
+
+```
+
+### 5. Efficiency Analysis
+
+Check the Parameters and FLOPs of the model:
+
+```bash
+python get_param_flops.py
+
+```
+
+### 6. Interpretability & Visualization
+
+To visualize the DCAF weights or intermediate feature maps (as discussed in the paper's interpretability section):
+
+```bash
+# Analyze DCAF weight evolution
+python DCAF_weight.py
+
+# Visualize stage-wise feature maps
+python visualize_stage.py --img_path samples/test_ct.nii.gz
+
+```
+
+---
+
+## 📊 Results (实验结果)
+
+Performance comparison on the LiTS17 benchmark:
+
+| Model | Params (M) | FLOPs (G) | Dice (Liver) | Dice (Tumor) | HD95 (mm) |
+| --- | --- | --- | --- | --- | --- |
+| U-Net | 17.26 | - | 90.XX | - | - |
+| TransUNet | 93.23 | 32.24 | - | 78.56 | - |
+| **PL-MoVi-UNet-S** | **2.45** | **0.94** | 90.76 | 79.80 | 3.65 |
+
+> **Note:** For full experimental results, including Cross-Modality (X-ray) generalization, please refer to the [Paper](https://www.google.com/search?q=%23).
+
+---
+
+## 🔨 Ablation Studies (消融实验)
+
+We verify the effectiveness of our core components:
+
+* **Baseline (MobileNetV3):** Dice 0.7266
+* **+ MobileViT (Dual-stream):** Dice 0.7391
+* **+ DCAF Module:** Dice 0.7808 (Solves semantic misalignment)
+* **+ MLSP Module:** Dice 0.7980 (Enhances small lesion detection)
+
+---
+
+## 📝 Citation (引用)
+
+If you find this code or our paper useful for your research, please cite:
+
+```bibtex
+@article{yourname2026plmoviunet,
+  title={PL-MoVi-UNet: A Parallel and Collaborative Lightweight Two-stream Architecture for Medical Image Segmentation in Edge Computing Environments},
+  author={Your Name and Co-authors},
+  journal={Journal Name (e.g., IEEE TMI)},
+  year={2026},
+  publisher={Publisher}
+}
+
+```
+
+---
+
+## 🛡️ License
+
+This project is released under the [MIT License](https://www.google.com/search?q=LICENSE).
+
+---
+
+### 💡 建议您在上传代码前做的几件事：
+
+1. **补充 `requirements.txt**`：运行 `pip freeze > requirements.txt` 生成环境依赖文件。
+2. **替换图片**：在根目录下建一个 `docs` 文件夹，把你论文里的 Figure 1（架构图）和一些漂亮的分割结果图（可视化对比图）放进去，并在 README 中引用。
+3. **完善 BibTeX**：把 `CITATION` 部分替换为您真实的论文信息（如果是投稿中，可以先写 Under Review）。
+4. **License**：在 GitHub 上创建一个 https://www.google.com/search?q=LICENSE 文件（通常选 MIT 或 Apache 2.0）。
+
+这个 README 结构清晰，既展示了学术成果（Table, Ablation），又提供了清晰的代码运行指引，非常符合 SCI 开源代码的标准。
