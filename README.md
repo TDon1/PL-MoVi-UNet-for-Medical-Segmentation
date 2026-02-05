@@ -11,7 +11,7 @@
 * **MLSP Module:** Multilevel Spatial Pyramid for capturing small lesions and fine details.
 * **Extreme Efficiency:** Achieves **38x parameter reduction** compared to TransUNet, with only **2.45M Params** and **0.94G FLOPs**.
 
-![*(Please replace `docs/architecture.png` with your Figure 1 architecture diagram)*](file:///C:/Users/tjl/Pictures/Typedown/607cc134-cea8-4b40-8400-e2f979a9bb3c.png)
+
 
 ---
 
@@ -131,5 +131,3 @@ python DCAF_weight.py
 python visualize_stage.py 
 
 ```
-
-![6c3b6a39-270f-4397-8a06-6c875e9bc523](file:///C:/Users/tjl/Pictures/Typedown/6c3b6a39-270f-4397-8a06-6c875e9bc523.png)
