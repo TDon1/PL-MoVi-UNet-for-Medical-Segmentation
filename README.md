@@ -25,7 +25,7 @@ This project uses the following datasets for training and evaluation. Please dow
 
 - **Source**: [Kaggle Link](https://www.kaggle.com/datasets/andrewmvd/lits17-challenge-dataset) or [CodaLab](https://competitions.codalab.org/competitions/17094)
 - **Description**: 3D CT scans for liver and tumor segmentation.
-- **Preprocessing**: Run `python preprocess/preprocess_lits.py` (if you have this script) to convert raw NIfTI files to the required format.
+- **Preprocessing**: Run `python preprocess/preprocess_lits.py`  to convert raw NIfTI files to the required format.
 
 ### 2. QaTa-COV19v2 (COVID-19 X-ray)
 
